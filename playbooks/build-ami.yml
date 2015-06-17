@@ -33,13 +33,8 @@
       register: snapshot_id
 
     - name: Wait for the snapshot to enter the "completed" state
-      command: aws ec2 describe-snapshots
+      command: aws ec2 wait snapshot-completed
                --snapshot-ids {{ snapshot_id.stdout }}
-               --query 'Snapshots[*].State'
-      register: snapshot_state
-      until: snapshot_state.stdout == "completed"
-      retries: 15
-      delay: 20
 
     # Use aws-cli register-image to create an Amazon EBS-backed AMI from a
     # snapshot of a root device volume

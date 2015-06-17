@@ -79,14 +79,12 @@
                --query 'Instances[*].InstanceId'
       register: instance_id
 
+    - name: Pause for a little to let EC2 instance start initialize
+      pause: seconds=5
+
     - name: Wait for the instance to enter the "running" state
-      command: aws ec2 describe-instances
-               --instance-id {{ instance_id.stdout }}
-               --query 'Reservations[*].Instances[*].State.Name'
-      register: instance_state
-      until: instance_state.stdout != "pending"
-      retries: 6
-      delay: 20
+      command: aws ec2 wait instance-running
+               --instance-ids {{ instance_id.stdout }}
 
     - name: Get the public DNS name of the instance
       command: aws ec2 describe-instances

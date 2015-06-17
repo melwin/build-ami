@@ -27,6 +27,9 @@
     INSTALL_ROOT: /mnt/inst_root
 
   tasks:
+    - name: Install httplib2 for Python
+      apt: name=python-httplib2 state=present
+
     # ---- Set up the specified ISO release ----
     - name: Download VyOS ISO release
       get_url: url={{ vyos_iso_url }} dest={{ vyos_iso_local }}
